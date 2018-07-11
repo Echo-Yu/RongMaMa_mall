@@ -60,6 +60,7 @@ var vm = new Vue({
 			this.image_code_id = this.generate_uuid();
 			this.image_code_url = this.host + '/image_codes/' + this.image_code_id + '/';
 		},
+
 		check_username: function (){
 			var len = this.username.length;
 			if(len<5||len>20) {
