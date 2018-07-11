@@ -55,7 +55,6 @@ var vm = new Vue({
             // 设置页面中图片验证码img标签的src属性
             this.image_code_url = this.host + "/image_codes/" + this.image_code_id + "/";
         },
-
 		//生成图片验证码
 		get_image_code: function(){
 			this.image_code_id = this.generate_uuid();
