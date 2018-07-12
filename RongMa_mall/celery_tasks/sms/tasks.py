@@ -1,7 +1,7 @@
 import logging
 
 from celery_tasks.main import celery_app
-from . utils.yuntongxun.sms import CCP#相对路径
+from .utils.yuntongxun.sms import CCP#相对路径
 
 
 logger =logging.getLogger('django')
