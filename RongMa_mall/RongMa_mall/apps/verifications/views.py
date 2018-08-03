@@ -63,6 +63,7 @@ class SMSCodeView(GenericAPIView):
         expires = str(constants.IMAGE_CODE_REDIS_EXPIRES // 60)
         send_sms_code.delay(mobile,sms_code,expires,constants.SMS_CODE_TEMP_ID)
         return Response({'message':'ok'})
+
 # url(r'^usernames/(?P<username>\w{5,20})/count/$', views.UsernameCountView.as_view()),
 class UsernameCountView(APIView):
     """ 用户名数量"""

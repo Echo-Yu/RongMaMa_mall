@@ -1,7 +1,7 @@
 var vm = new Vue({
     el: '#app',
     data: {
-        host: host,
+        host: host1,
         error_username: false,
         error_pwd: false,
         error_pwd_message: '请填写密码',
@@ -83,7 +83,16 @@ var vm = new Vue({
         },
         // qq登录
         qq_login: function(){
-
+            var next = this.get_query_string('next') || '/';
+            axios.get(this.host + '/oauth/qq/authorization/?next=' + next, {
+                    responseType: 'json'
+                })
+                .then(response => {
+                    location.href = response.data.login_url;
+                })
+                .catch(error => {
+                    console.log(error.response.data);
+                })
         }
     }
 });

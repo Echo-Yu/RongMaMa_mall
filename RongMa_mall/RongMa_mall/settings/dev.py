@@ -42,9 +42,11 @@ INSTALLED_APPS = [
     'corsheaders',
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
+    'oauth.apps.OauthConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',# 解决跨域请求的
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'RongMa_mall.urls'
@@ -224,5 +226,11 @@ CORS_ORIGIN_WHITELIST = (
     'api.meiduo.site:8000'
 )
 CORS_ALLOW_CREDENTIALS = True
+
+# QQ登录
+QQ_CLIENT_ID = '101474184'
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'
+QQ_STATE = '/index.html'
+QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'
 
 
