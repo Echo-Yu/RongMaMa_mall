@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+import datetime
 import os
 import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,7 +26,7 @@ SECRET_KEY = 'qu_*b_rs&)01#9q9(3$e*o(52o$h@(n@!whe7=46)&z#ie4mvb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['api.meiduo.site', '127.0.0.1', 'localhost', 'www.meiduo.site']
 
 
 # Application definition
@@ -39,10 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'users.apps.UsersConfig'
+    'corsheaders',
+    'users.apps.UsersConfig',
+    'verifications.apps.VerificationsConfig',
+    'oauth.apps.OauthConfig',
+    'areas.apps.AreasConfig',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',# 解决跨域请求的
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -50,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'RongMa_mall.urls'
@@ -99,6 +105,13 @@ CACHES = {
     "session": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    "verify_codes": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -189,7 +202,52 @@ LOGGING = {
 # 指明自定义的用户模型类
 AUTH_USER_MODEL = 'users.User'
 
+AUTHENTICATION_BACKENDS = [
+    'users.utils.UsernameMobileAuthBackend',
+]
+
 REST_FRAMEWORK = {
     # 异常处理
     'EXCEPTION_HANDLER': 'RongMa_mall.utils.exceptions.exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
 }
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.utils.jwt_response_payload_handler',
+}
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    '127.0.0.1:8080',
+    'localhost:8080',
+    'www.meiduo.site:8080',
+    'api.meiduo.site:8000'
+)
+CORS_ALLOW_CREDENTIALS = True
+
+# QQ登录
+QQ_CLIENT_ID = '101474184'
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html'
+QQ_STATE = '/index.html'
+QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'itcast88@163.com'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = 'python808'
+#收件人看到的发件人
+EMAIL_FROM = '荣妈妈<itcast88@163.com>'
+
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
+}
+
