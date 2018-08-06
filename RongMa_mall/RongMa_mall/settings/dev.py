@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
     'oauth.apps.OauthConfig',
+    'areas.apps.AreasConfig',
 ]
 
 MIDDLEWARE = [
@@ -242,4 +243,11 @@ EMAIL_HOST_USER = 'itcast88@163.com'
 EMAIL_HOST_PASSWORD = 'python808'
 #收件人看到的发件人
 EMAIL_FROM = '荣妈妈<itcast88@163.com>'
+
+REST_FRAMEWORK_EXTENSIONS = {
+    # 缓存时间
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 60,
+    # 缓存存储
+    'DEFAULT_USE_CACHE': 'default',
+}
 
